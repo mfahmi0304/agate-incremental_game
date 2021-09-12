@@ -10,6 +10,10 @@ public class ResourceController : MonoBehaviour
     public Text ResourceUpgradeCost;
     public Text ResourceUnlockCost; 
 
+    public string unlockCost;
+    public string upCost;
+    public string descCost;
+
     private ResourceConfig _config;
 
     private int _level = 1;
@@ -34,9 +38,12 @@ public class ResourceController : MonoBehaviour
     {
         _config = config;
 
+        unlockCost = _config.UnlockCost.ToString("#,#");
+        descCost = GetOutput ().ToString("#,#");
+
         // ToString("0") berfungsi untuk membuang angka di belakang koma
-        ResourceDescription.text = $"{ _config.Name } Lv. { _level }\n+{ GetOutput ().ToString ("0") }";
-        ResourceUnlockCost.text = $"Unlock Cost\n{ _config.UnlockCost }";
+        ResourceDescription.text = $"{ _config.Name } Lv. { _level }\n+{ descCost }";
+        ResourceUnlockCost.text = $"Unlock Cost\n{ unlockCost }";
         ResourceUpgradeCost.text = $"Upgrade Cost\n{ GetUpgradeCost () }";
 
         SetUnlocked (_config.UnlockCost == 0);
@@ -65,18 +72,26 @@ public class ResourceController : MonoBehaviour
             return;
         }
         else{
-            if(_level >= 10){
+            if(_level == 10){
                 return;
             }
-            GameManager.Instance.AddGold (-upgradeCost);
-            _level++;
+            else{
+                GameManager.Instance.AddGold (-upgradeCost);
+                _level++;
 
-            ButtonUpgrade.Play();
-            ResourceUpgradeCost.text = $"Upgrade Cost\n{ GetUpgradeCost () }";
-            ResourceDescription.text = $"{ _config.Name } Lv. { _level }\n+{ GetOutput ().ToString ("0") }";
+                upCost = GetUpgradeCost ().ToString("#,#");
+                descCost = GetOutput ().ToString("#,#");
+
+                ButtonUpgrade.Play();
+                if(_level == 10){
+                    ResourceUpgradeCost.text = $"MAX";
+                }
+                else{
+                    ResourceUpgradeCost.text = $"Upgrade Cost\n{ upCost }";
+                }
+                ResourceDescription.text = $"{ _config.Name } Lv. { _level }\n+{ descCost }";
+            }
         }
-
-        
     }
 
     public void UnlockResource ()

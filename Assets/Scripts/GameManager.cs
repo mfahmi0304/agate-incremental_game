@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour
 
         output *= AutoCollectPercentage; 
         // Fungsi ToString("F1") ialah membulatkan angka menjadi desimal yang memiliki 1 angka di belakang koma 
-        AutoCollectInfo.text = $"Auto Collect: { output.ToString ("F1") } / second";  
+        AutoCollectInfo.text = $"Auto Collect: { output.ToString ("N1") } / second";  
 
         AddGold (output); 
     } 
@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
     public void AddGold (double value) 
     { 
         _totalGold += value; 
-        GoldInfo.text = $"Gold: { _totalGold.ToString ("0") }"; 
+        GoldInfo.text = $"Gold: { _totalGold.ToString ("#,#") }"; 
     } 
 
     public void CollectByTap (Vector3 tapPosition, Transform parent)
@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
         tapText.transform.SetParent (parent, false);
         tapText.transform.position = tapPosition;
 
-        tapText.Text.text = $"+{ output.ToString ("0") }";
+        tapText.Text.text = $"+{ output.ToString ("#,#") }";
         tapText.gameObject.SetActive (true);
         CoinIcon.transform.localScale = Vector3.one * 1.75f;
 
